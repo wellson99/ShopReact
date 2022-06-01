@@ -8,7 +8,7 @@ export const useFirestore = (collectionParam) => {
   // const [actionCancelled, setActionCancelled] = useState(false)
   const collectionRef = collection(db, collectionParam)
 
-  const addDocument = async (data, autoID) => {
+  const addDocument = async (data, autoID, uid) => {
     setError(null)
     setActionPending(true)
 
@@ -16,7 +16,7 @@ export const useFirestore = (collectionParam) => {
       if(autoID){
         await addDoc(collectionRef, {...data, createdAt: timestamp.now()})
       }else{
-        const docRef = doc(db, collectionParam, data.uid)
+        const docRef = doc(db, collectionParam, uid)
         await setDoc(docRef, {...data, createdAt: timestamp.now()})
       }
       setError(null)

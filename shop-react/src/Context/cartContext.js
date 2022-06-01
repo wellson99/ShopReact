@@ -6,7 +6,7 @@ import {useFirestore} from "../Hooks/useFirestore"
 
 export const CartContext = createContext()
 
-const initialState = {cart: []}
+const initialState = {cart: null}
 
 export const cartReducer = (state, action) => {
   switch(action.type){
@@ -40,11 +40,17 @@ export const CartContextProvider = ({children}) => {
     if(user){
       let docRef = doc(db, "Users", user.uid)
       getDoc(docRef).then(snapshot => {
-        console.log(snapshot.data().cart)
-        setFirebaseCart(snapshot.data().cart)
-        dispatch({type: "SET_CART", payload: snapshot.data().cart})
+        if(snapshot.exists()){
+          console.log(snapshot.data().cart)
+          setFirebaseCart(snapshot.data().cart)
+          dispatch({type: "SET_CART", payload: snapshot.data().cart})
+        }else{
+          setFirebaseCart([])
+          dispatch({type: "SET_CART", payload: []})
+        }
       })
     }
+    // console.log("run")
   }, [user])
 
   const addToCart = (item) => {

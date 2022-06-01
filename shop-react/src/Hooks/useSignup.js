@@ -23,7 +23,7 @@ export const useSignup = () => {
       updateProfile(res.user, {displayName}).then(async () => {
         dispatch({type: 'SIGNUP', payload: res.user})
         let data = {lastSigninAt: Timestamp.now(), lastSignoutAt: null, cart: []}
-        await addDocument(data, false)
+        await addDocument(data, false, res.user.uid)
         setError(null)
         setActionPending(false)
       })      
